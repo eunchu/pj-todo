@@ -18,6 +18,9 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     line-height: 1;
 
+    background-color: ${({ theme }) => theme.bgColor};
+    color: #303030;
+
     margin: 0;
     padding: 0;
   } 

@@ -1,8 +1,16 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import { Fragment } from "react";
+import type { AppProps } from "next/app";
+// import { RecoilRoot } from 'recoil';
+
+import GlobalStyle from "../styles/globals";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <Fragment>
+      <Component {...pageProps} />
+      <GlobalStyle />
+    </Fragment>
+  );
 }
 
-export default MyApp
+export default MyApp;

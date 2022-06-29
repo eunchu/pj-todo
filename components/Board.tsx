@@ -20,7 +20,6 @@ const BoardBox = styled.ul`
   min-height: 300px;
 
   background-color: ${({ theme }) => theme.boardColor};
-  font-size: 16px;
 
   padding: 16px;
   border-radius: 6px;

@@ -44,18 +44,18 @@ const Home: NextPage = () => {
         droppableId: "one",
         index: 1,
       },
-      {
-        id: "2",
-        title: "card2",
-        droppableId: "one",
-        index: 2,
-      },
-      {
-        id: "3",
-        title: "card3",
-        droppableId: "one",
-        index: 3,
-      },
+      // {
+      //   id: "2",
+      //   title: "card2",
+      //   droppableId: "one",
+      //   index: 2,
+      // },
+      // {
+      //   id: "3",
+      //   title: "card3",
+      //   droppableId: "one",
+      //   index: 3,
+      // },
     ].map((item) => list.set(item.id, item));
     setToDos((todos) => {
       return { ...todos, "To Do": list };

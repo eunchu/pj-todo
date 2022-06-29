@@ -20,8 +20,6 @@ interface ICardProps {
   toDo: ITodo;
 }
 const DragabbleCard = ({ toDo }: ICardProps) => {
-  console.log("111", toDo);
-
   return (
     <Draggable key={toDo.id} draggableId={toDo.id} index={toDo.index}>
       {(provided) => (

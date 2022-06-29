@@ -1,1 +1,1 @@
-export { ITodos, ITodo } from "./todos";
+export type { ITodo, ITodos } from "./todos";

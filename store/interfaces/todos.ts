@@ -6,7 +6,5 @@ export interface ITodo {
 }
 
 export interface ITodos {
-  toDo: Map<string, ITodo>;
-  doing: Map<string, ITodo>;
-  done: Map<string, ITodo>;
+  [key: string]: Map<string, ITodo>;
 }

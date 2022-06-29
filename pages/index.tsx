@@ -2,7 +2,6 @@ import type { GetServerSideProps, NextPage } from "next";
 import { useEffect } from "react";
 import {
   DragDropContext,
-  Droppable,
   resetServerContext,
   DropResult,
 } from "react-beautiful-dnd";
@@ -10,11 +9,11 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { ITodos } from "@store/interfaces";
-import { toDoState } from "@store/todos";
-import DragabbleCard from "@components/DragabbleCard";
+import { toDoState } from "@store/todosAtom";
+import Board from "@components/Board";
 
 const Wrapper = styled.div`
-  max-width: 480px;
+  max-width: 680px;
   width: 100%;
   height: 100vh;
 
@@ -28,21 +27,14 @@ const Boards = styled.div`
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(3, fr);
-`;
-const Board = styled.ul`
-  min-height: 300px;
-
-  background-color: ${({ theme }) => theme.boardColor};
-  font-size: 16px;
-
-  padding: 16px;
-  border-radius: 6px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 `;
 
 const Home: NextPage = () => {
   const [toDos, setToDos] = useRecoilState<ITodos>(toDoState);
 
+  // NOTE Init data
   useEffect(() => {
     const list = new Map();
     [
@@ -66,52 +58,41 @@ const Home: NextPage = () => {
       },
     ].map((item) => list.set(item.id, item));
     setToDos((todos) => {
-      return { ...todos, toDo: list };
+      return { ...todos, "To Do": list };
     });
   }, [setToDos]);
 
   // NOTE 드래그가 끝났을 때
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-    // console.log("??", draggableId, destination, source);
+    console.log("drapEnd info", draggableId, destination, source);
 
-    setToDos((todos) => {
-      const todoList = new Map(todos.toDo);
-
-      const target = todoList.get(draggableId);
-      target &&
-        todoList.set(target.id, {
-          ...target,
-          index: destination?.index as number,
-        });
-      const target2 = todoList.get(`${destination?.index}`);
-
-      target2 &&
-        todoList.set(target2.id, {
-          ...target2,
-          index: source?.index as number,
-        });
-
-      return { ...todos, toDo: todoList };
-    });
+    // setToDos((todos) => {
+    //   const todoList = new Map(todos.toDo);
+    //   const target = todoList.get(draggableId);
+    //   target &&
+    //     todoList.set(target.id, {
+    //       ...target,
+    //       index: destination?.index as number,
+    //     });
+    //   const target2 = todoList.get(`${destination?.index}`);
+    //   target2 &&
+    //     todoList.set(target2.id, {
+    //       ...target2,
+    //       index: source?.index as number,
+    //     });
+    //   return { ...todos, "To Do": todoList };
+    // });
   };
 
-  console.log("???", toDos);
+  // console.log("???", toDos);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(provided) => (
-              <Board ref={provided.innerRef} {...provided.droppableProps}>
-                {toDos &&
-                  [...toDos.toDo.values()]?.map((toDo) => (
-                    <DragabbleCard key={toDo.id} toDo={toDo} />
-                  ))}
-                {provided.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(toDos).map((id) => (
+            <Board key={id} toDos={toDos[id]} id={id} />
+          ))}
         </Boards>
       </Wrapper>
     </DragDropContext>

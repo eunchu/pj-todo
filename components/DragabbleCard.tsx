@@ -8,7 +8,7 @@ const Card = styled.li`
   height: 100px;
 
   background-color: ${({ theme }) => theme.cardColor};
-  box-shadow: 2px 2px 6px -1px rgba(48, 48, 48, 0.1);
+  box-shadow: 2px 2px 6px -1px rgba(130, 130, 130, 0.1);
   border-radius: 6px;
 
   padding: 10px;

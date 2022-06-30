@@ -6,18 +6,30 @@ import {
   resetServerContext,
   DropResult,
 } from "react-beautiful-dnd";
-import DragabbleCard from "./DragabbleCard";
+import { MoreOutlined } from "@ant-design/icons";
+
 import { ITodo } from "@store/interfaces";
 
-const Wrapper = styled.section``;
-const Title = styled.section`
+import DragabbleCard from "./DragabbleCard";
+
+const Wrapper = styled.section`
+  .board-title-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+  }
+`;
+const Title = styled.h3`
   font-size: 14px;
   font-weight: 600;
-
-  margin-bottom: 10px;
+`;
+const MoreMenu = styled.div`
+  cursor: pointer;
 `;
 const BoardBox = styled.ul`
-  min-height: 300px;
+  height: calc(100% - 24px);
 
   background-color: ${({ theme }) => theme.boardColor};
 
@@ -32,7 +44,12 @@ interface IBoardProps {
 const Board = ({ id, toDos }: IBoardProps) => {
   return (
     <Wrapper>
-      <Title>{id}</Title>
+      <div className="board-title-area">
+        <Title>{id}</Title>
+        <MoreMenu>
+          <MoreOutlined />
+        </MoreMenu>
+      </div>
       <Droppable droppableId={id}>
         {(provided) => (
           <BoardBox ref={provided.innerRef} {...provided.droppableProps}>

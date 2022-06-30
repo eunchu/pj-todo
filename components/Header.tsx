@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import {
   GithubOutlined,
@@ -7,6 +7,10 @@ import {
   ReadOutlined,
   LayoutFilled,
 } from "@ant-design/icons";
+import { useRecoilState } from "recoil";
+
+import { commonState } from "@store/commonsAtom";
+import { EMenu } from "@store/interfaces";
 
 const Container = styled.header`
   height: 50px;
@@ -15,14 +19,12 @@ const Container = styled.header`
   align-items: center;
   justify-content: space-between;
 
-  background-color: #ffffff9f;
-  border-bottom: 1px solid #ffffff;
+  background-color: ${({ theme }) => theme.headerColor};
 
   padding: 0 60px;
   .header-icon {
     font-size: 18px;
-    color: #434f95;
-    cursor: pointer;
+    color: #7e848d8d;
   }
 `;
 const Logo = styled.div`
@@ -31,32 +33,58 @@ const Logo = styled.div`
 
   .logo-icon {
     font-size: 20px;
-    color: #efa067;
+    color: ${({ theme }) => theme.mainColor};
     margin-right: 8px;
   }
 `;
 const Navigator = styled.ul`
   display: flex;
-  gap: 30px;
 `;
-const Right = styled.div`
+interface INavProps {
+  active: boolean;
+}
+const Nav = styled.li<INavProps>`
+  width: 50px;
+  height: 50px;
+
   display: flex;
   align-items: center;
+  justify-content: center;
 
-  gap: 20px;
+  border-bottom: ${(props) =>
+    props.active && `1px solid ${props.theme.mainColor}`};
+  cursor: ${(props) => props.active && "pointer"};
 
-  .profile-box {
-    width: 30px;
-    height: 30px;
-
-    border-radius: 50%;
-    img {
-      width: 100%;
-    }
+  .header-icon {
+    color: ${(props) => props.active && props.theme.mainColor};
+  }
+`;
+const Right = styled.div`
+  .header-icon {
+    color: #a2b3ce;
   }
 `;
 
 const Header = () => {
+  const [activeMenu, setActiveMenu] = useRecoilState(commonState);
+
+  const navList = useMemo(() => {
+    return [
+      {
+        id: EMenu.BOARD,
+        render: <AppstoreAddOutlined className="header-icon" />,
+      },
+      {
+        id: EMenu.CALENDER,
+        render: <CalendarOutlined disabled className="header-icon" />,
+      },
+      {
+        id: EMenu.WIKI,
+        render: <ReadOutlined className="header-icon" />,
+      },
+    ];
+  }, []);
+
   return (
     <Container>
       <Logo>
@@ -65,15 +93,11 @@ const Header = () => {
       </Logo>
       <nav>
         <Navigator>
-          <li>
-            <AppstoreAddOutlined className="header-icon" />
-          </li>
-          <li>
-            <CalendarOutlined className="header-icon" />
-          </li>
-          <li>
-            <ReadOutlined className="header-icon" />
-          </li>
+          {navList.map((nav) => (
+            <Nav active={nav.id === activeMenu ? true : false} key={nav.id}>
+              {nav.render}
+            </Nav>
+          ))}
         </Navigator>
       </nav>
       <Right>
@@ -81,9 +105,6 @@ const Header = () => {
           className="header-icon"
           onClick={() => window.open("https://github.com/eunchu", "_blank")}
         />
-        {/* <div className="profile-box">
-          <img src="https://github.com/eunchu.png" alt="" />
-        </div> */}
       </Right>
     </Container>
   );

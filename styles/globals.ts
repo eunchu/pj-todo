@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
   }
   html, body, #root {
     width: 100%;
+    min-width: 1200px;
     height: 100%;
 
     font-family: 'Raleway', sans-serif;

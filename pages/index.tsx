@@ -12,7 +12,10 @@ import { UserOutlined, AntDesignOutlined } from "@ant-design/icons";
 
 import { ITodos } from "@store/interfaces";
 import { toDoState } from "@store/todosAtom";
+
 import Board from "@components/Board";
+import TaskProgress from "@components/TaskProgress";
+import RecentActivity from "@components/RecentActivity";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -104,26 +107,36 @@ const Home: NextPage = () => {
   }, [setToDos]);
 
   // NOTE 드래그가 끝났을 때
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-    console.log("drapEnd info", draggableId, destination, source);
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    // console.log("drapEnd info", destination, source);
 
-    // setToDos((todos) => {
-    //   const todoList = new Map(todos.toDo);
-    //   const target = todoList.get(draggableId);
-    //   target &&
-    //     todoList.set(target.id, {
-    //       ...target,
-    //       index: destination?.index as number,
-    //     });
-    //   const target2 = todoList.get(`${destination?.index}`);
-    //   target2 &&
-    //     todoList.set(target2.id, {
-    //       ...target2,
-    //       index: source?.index as number,
-    //     });
-    //   return { ...todos, "To Do": todoList };
-    // });
+    // 같은 보드안에서의 Card이동
+    if (destination?.droppableId === source.droppableId) {
+      setToDos((toDos) => {
+        const newToDo = new Map(toDos[source.droppableId]);
+
+        const startTarget = newToDo.get(`${source.index}`);
+        const endTarget = newToDo.get(`${destination.index}`);
+        console.log("?", source.index, destination.index);
+
+        if (startTarget && endTarget) {
+          // newToDo.delete(startTarget?.id);
+          newToDo.set(startTarget?.id, {
+            ...endTarget,
+            id: startTarget.id,
+          });
+          newToDo.set(endTarget?.id, {
+            ...startTarget,
+            id: endTarget.id,
+          });
+        }
+
+        return { ...toDos, [source.droppableId]: newToDo };
+      });
+    }
   };
+
+  console.log("toDos", toDos);
 
   return (
     <Container>
@@ -166,7 +179,10 @@ const Home: NextPage = () => {
         </DragDropContext>
       </DragArea>
       {/* NOTE Info 영역 */}
-      <InfoArea>info</InfoArea>
+      <InfoArea>
+        <TaskProgress />
+        <RecentActivity />
+      </InfoArea>
     </Container>
   );
 };

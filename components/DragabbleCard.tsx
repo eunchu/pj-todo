@@ -4,7 +4,10 @@ import styled from "styled-components";
 
 import { ITodo } from "@store/interfaces";
 
-const Card = styled.li`
+interface ICardProps {
+  isDragging: boolean;
+}
+const Card = styled.div<ICardProps>`
   height: 100px;
 
   background-color: ${({ theme }) => theme.cardColor};
@@ -13,6 +16,8 @@ const Card = styled.li`
 
   padding: 10px;
   margin-bottom: 10px;
+
+  opacity: ${(props) => props.isDragging && 0.7};
   &:last-child {
     margin-bottom: 0;
   }
@@ -25,8 +30,9 @@ interface ICardProps {
 const DragabbleCard = ({ toDo, index }: ICardProps) => {
   return (
     <Draggable key={toDo} draggableId={`${toDo}`} index={index}>
-      {(provided) => (
+      {(provided, snepshot) => (
         <Card
+          isDragging={snepshot.isDragging}
           ref={provided.innerRef}
           {...provided.dragHandleProps}
           {...provided.draggableProps}

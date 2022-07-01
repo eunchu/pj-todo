@@ -28,13 +28,20 @@ const Title = styled.h3`
 const MoreMenu = styled.div`
   cursor: pointer;
 `;
-const BoardBox = styled.ul`
+interface IBoardBoxProps {
+  isDraggingOver: boolean;
+  isDraggingFromThis: boolean;
+}
+const BoardBox = styled.div<IBoardBoxProps>`
   height: calc(100% - 24px);
 
-  background-color: ${({ theme }) => theme.boardColor};
+  background-color: ${(props) =>
+    props.isDraggingOver ? "#cccccc" : props.theme.boardColor};
 
   padding: 16px;
   border-radius: 6px;
+
+  transition: background-color 0.3s;
 `;
 
 interface IBoardProps {
@@ -51,8 +58,14 @@ const Board = ({ id, toDos }: IBoardProps) => {
         </MoreMenu>
       </div>
       <Droppable droppableId={id}>
-        {(provided) => (
-          <BoardBox ref={provided.innerRef} {...provided.droppableProps}>
+        {(provided, snepshot) => (
+          <BoardBox
+            isDraggingOver={snepshot.isDraggingOver}
+            // 원래 spot에서 떠날때
+            isDraggingFromThis={Boolean(snepshot.draggingFromThisWith)}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
             {toDos.map((toDo, idx) => (
               <DragabbleCard key={toDo} index={idx} toDo={toDo} />
             ))}

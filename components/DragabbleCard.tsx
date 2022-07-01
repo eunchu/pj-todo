@@ -20,17 +20,18 @@ const Card = styled.li`
 
 interface ICardProps {
   toDo: ITodo;
+  index: number;
 }
-const DragabbleCard = ({ toDo }: ICardProps) => {
+const DragabbleCard = ({ toDo, index }: ICardProps) => {
   return (
-    <Draggable key={toDo.id} draggableId={toDo.id} index={toDo.index}>
+    <Draggable key={toDo} draggableId={`${toDo}`} index={index}>
       {(provided) => (
         <Card
           ref={provided.innerRef}
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          {toDo.title}
+          {toDo}
         </Card>
       )}
     </Draggable>

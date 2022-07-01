@@ -39,7 +39,7 @@ const BoardBox = styled.ul`
 
 interface IBoardProps {
   id: string;
-  toDos: Map<string, ITodo>;
+  toDos: string[];
 }
 const Board = ({ id, toDos }: IBoardProps) => {
   return (
@@ -53,8 +53,8 @@ const Board = ({ id, toDos }: IBoardProps) => {
       <Droppable droppableId={id}>
         {(provided) => (
           <BoardBox ref={provided.innerRef} {...provided.droppableProps}>
-            {[...toDos.values()]?.map((toDo) => (
-              <DragabbleCard key={toDo.id} toDo={toDo} />
+            {toDos.map((toDo, idx) => (
+              <DragabbleCard key={toDo} index={idx} toDo={toDo} />
             ))}
             {provided.placeholder}
           </BoardBox>

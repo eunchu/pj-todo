@@ -71,7 +71,7 @@ const InfoArea = styled.section`
   width: 300px;
   min-width: 300px;
 
-  border-left: 1px solid #d7dbe8;
+  background-color: ${({ theme }) => theme.infoBgColor};
   padding: 60px 40px;
 `;
 
@@ -120,7 +120,7 @@ const Home: NextPage = () => {
         console.log("?", source.index, destination.index);
 
         if (startTarget && endTarget) {
-          // newToDo.delete(startTarget?.id);
+          newToDo.delete(startTarget?.id);
           newToDo.set(startTarget?.id, {
             ...endTarget,
             id: startTarget.id,
@@ -180,6 +180,7 @@ const Home: NextPage = () => {
       </DragArea>
       {/* NOTE Info 영역 */}
       <InfoArea>
+        {/* 캘린더 추가 */}
         <TaskProgress />
         <RecentActivity />
       </InfoArea>

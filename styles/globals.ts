@@ -9,6 +9,9 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+  button {
+    border: none;
+  }
   html, body, #root {
     width: 100%;
     min-width: 1200px;

@@ -1,10 +1,8 @@
-// export interface ITodo {
-//   id: string;
-//   title: string;
-//   droppableId: string;
-//   index: number;
-// }
+export interface ITodo {
+  id: number;
+  title: string;
+}
 
 export interface ITodos {
-  [key: string]: string[];
+  [key: string]: ITodo[];
 }

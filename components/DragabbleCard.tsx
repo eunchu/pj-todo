@@ -29,7 +29,7 @@ interface ICardProps {
 }
 const DragabbleCard = ({ toDo, index }: ICardProps) => {
   return (
-    <Draggable key={toDo} draggableId={`${toDo}`} index={index}>
+    <Draggable key={toDo.id} draggableId={`${toDo.id}`} index={index}>
       {(provided, snepshot) => (
         <Card
           isDragging={snepshot.isDragging}
@@ -37,7 +37,7 @@ const DragabbleCard = ({ toDo, index }: ICardProps) => {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          {toDo}
+          {toDo.title}
         </Card>
       )}
     </Draggable>

@@ -9,4 +9,5 @@ export const defaultTheme: DefaultTheme = {
   borderColor: "#EFEFF1",
   infoBgColor: "rgba(255,255,255,0.6)",
   // todo, progress, review, done 컬러 지정
+  disabledBgColor: "#cccccc",
 };

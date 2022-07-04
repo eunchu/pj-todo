@@ -5,9 +5,15 @@ import { ITodos } from "./interfaces";
 export const toDoState = atom<ITodos>({
   key: "toDo",
   default: {
-    "To Do": ["1", "2"],
-    "In Progress": ["3"],
-    Review: ["4"],
-    Done: ["5", "6"],
+    "To Do": [
+      {
+        id: 1,
+        title: "hi1",
+      },
+      { id: 2, title: "hi2" },
+    ],
+    "In Progress": [],
+    Review: [],
+    Done: [],
   },
 });

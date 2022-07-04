@@ -78,34 +78,6 @@ const InfoArea = styled.section`
 const Home: NextPage = () => {
   const [toDos, setToDos] = useRecoilState<ITodos>(toDoState);
 
-  // NOTE Init data
-  // useEffect(() => {
-  //   const list = new Map();
-  //   [
-  //     {
-  //       id: "To Do|0",
-  //       title: "card1",
-  //       droppableId: "one",
-  //       index: 0,
-  //     },
-  //     {
-  //       id: "To Do|1",
-  //       title: "card2",
-  //       droppableId: "one",
-  //       index: 1,
-  //     },
-  //     {
-  //       id: "To Do|2",
-  //       title: "card3",
-  //       droppableId: "one",
-  //       index: 2,
-  //     },
-  //   ].map((item) => list.set(item.id, item));
-  //   setToDos((todos) => {
-  //     return { ...todos, "To Do": list };
-  //   });
-  // }, [setToDos]);
-
   // NOTE 드래그가 끝났을 때
   const onDragEnd = ({ destination, draggableId, source }: DropResult) => {
     if (!destination || !source) return;
@@ -114,8 +86,10 @@ const Home: NextPage = () => {
     if (destination?.droppableId === source.droppableId) {
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
+        const target = boardCopy[source.index];
+
         boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination.index, 0, draggableId);
+        boardCopy.splice(destination.index, 0, target);
 
         return { ...allBoards, [source.droppableId]: boardCopy };
       });
@@ -123,11 +97,11 @@ const Home: NextPage = () => {
       // 다른 보드로의 Card이동
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
+        const target = sourceBoard[source.index];
         const destinationBoard = [...allBoards[destination.droppableId]];
 
         sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination.index, 0, draggableId);
-
+        destinationBoard.splice(destination.index, 0, target);
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,

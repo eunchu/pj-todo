@@ -3,8 +3,10 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],
+      "@molecules/*": ["components/molecules/*"],
       "@styles/*": ["styles/*"],
-      "@store/*": ["store/*"]
+      "@store/*": ["store/*"],
+      "@utils": ["utils"]
     },
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -21,6 +23,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "server.js"],
   "exclude": ["node_modules"]
 }

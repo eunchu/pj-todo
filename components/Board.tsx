@@ -1,15 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  DragDropContext,
-  Droppable,
-  resetServerContext,
-  DropResult,
-} from "react-beautiful-dnd";
-import { MoreOutlined } from "@ant-design/icons";
+import { Droppable } from "react-beautiful-dnd";
+import { MoreOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 import { ITodo } from "@store/interfaces";
 
+import CreateIssuePopup from "@components/CreateIssuePopup";
 import DragabbleCard from "./DragabbleCard";
 
 const Wrapper = styled.section`
@@ -26,7 +22,12 @@ const Title = styled.h3`
   font-weight: 600;
 `;
 const MoreMenu = styled.div`
+  font-size: 14px;
+
   cursor: pointer;
+  .add-board {
+    margin-right: 6px;
+  }
 `;
 interface IBoardBoxProps {
   isDraggingOver: boolean;
@@ -46,14 +47,20 @@ const BoardBox = styled.div<IBoardBoxProps>`
 
 interface IBoardProps {
   id: string;
-  toDos: string[];
+  toDos: ITodo[];
 }
 const Board = ({ id, toDos }: IBoardProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <Wrapper>
       <div className="board-title-area">
         <Title>{id}</Title>
         <MoreMenu>
+          <PlusCircleOutlined
+            className="add-board"
+            onClick={() => setIsOpen(true)}
+          />
           <MoreOutlined />
         </MoreMenu>
       </div>
@@ -67,12 +74,13 @@ const Board = ({ id, toDos }: IBoardProps) => {
             {...provided.droppableProps}
           >
             {toDos.map((toDo, idx) => (
-              <DragabbleCard key={toDo} index={idx} toDo={toDo} />
+              <DragabbleCard key={toDo.id} index={idx} toDo={toDo} />
             ))}
             {provided.placeholder}
           </BoardBox>
         )}
       </Droppable>
+      {isOpen && <CreateIssuePopup onClose={() => setIsOpen(false)} />}
     </Wrapper>
   );
 };

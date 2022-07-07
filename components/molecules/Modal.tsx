@@ -50,9 +50,12 @@ const Title = styled.div`
   font-size: 15px;
   font-weight: 600;
 `;
-const Content = styled.div`
+interface IContent {
+  isButton: boolean;
+}
+const Content = styled.div<IContent>`
   flex-grow: 1;
-  padding: 24px;
+  padding: ${(props) => (!props.isButton ? "24px 0 0 0" : "24px")};
 `;
 const FooterArea = styled.div`
   height: 60px;
@@ -74,7 +77,12 @@ interface IModalProps {
   width?: number;
   height?: number;
   title?: string;
-  buttons?: { name: string; type: string; width?: string }[];
+  buttons?: {
+    name: string;
+    type: string;
+    width?: string;
+    onClick: () => void;
+  }[];
   onClose: () => void;
   children: React.ReactElement;
 }
@@ -94,29 +102,36 @@ const Modal: React.FC<IModalProps> = ({
             <Title>{title}</Title>
             <CloseOutlined onClick={onClose} className="ic-modal-close" />
           </HeaderArea>
-          <Content>{children}</Content>
-          <FooterArea>
-            {buttons?.map((button, idx) =>
-              button.type === "primary" ? (
-                <ButtonPrimary
-                  onClick={() => button.name === "Close" && onClose()}
-                  width={button.width ?? "100%"}
-                  customStyle={{ marginRight: "8px" }}
-                  key={idx}
-                >
-                  {button.name}
-                </ButtonPrimary>
-              ) : (
-                <ButtonSecondary
-                  onClick={() => button.name === "Close" && onClose()}
-                  width={button.width ?? "100%"}
-                  key={idx}
-                >
-                  {button.name}
-                </ButtonSecondary>
-              )
-            )}
-          </FooterArea>
+          <Content isButton={buttons ? true : false}>{children}</Content>
+          {buttons && (
+            <FooterArea>
+              {buttons.map((button, idx) =>
+                button.type === "primary" ? (
+                  <ButtonPrimary
+                    onClick={() => button.onClick()}
+                    customStyle={{
+                      width: button.width ?? "100%",
+                      marginRight: "8px",
+                    }}
+                    key={idx}
+                  >
+                    {button.name}
+                  </ButtonPrimary>
+                ) : (
+                  <ButtonSecondary
+                    onClick={() => button.onClick()}
+                    customStyle={{
+                      width: button.width ?? "100%",
+                      marginRight: "8px",
+                    }}
+                    key={idx}
+                  >
+                    {button.name}
+                  </ButtonSecondary>
+                )
+              )}
+            </FooterArea>
+          )}
         </Container>
       </Background>
     </Portal>

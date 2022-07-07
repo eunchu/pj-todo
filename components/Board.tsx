@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import { MoreOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
-import { ITodo } from "@store/interfaces";
+import { ITask } from "@store/interfaces";
 
 import CreateIssuePopup from "@components/CreateIssuePopup";
 import DragabbleCard from "./DragabbleCard";
@@ -47,9 +47,9 @@ const BoardBox = styled.div<IBoardBoxProps>`
 
 interface IBoardProps {
   id: string;
-  toDos: ITodo[];
+  tasks: ITask[];
 }
-const Board = ({ id, toDos }: IBoardProps) => {
+const Board = ({ id, tasks }: IBoardProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -73,8 +73,8 @@ const Board = ({ id, toDos }: IBoardProps) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {toDos.map((toDo, idx) => (
-              <DragabbleCard key={toDo.id} index={idx} toDo={toDo} />
+            {tasks.map((task, idx) => (
+              <DragabbleCard key={task.id} index={idx} task={task} />
             ))}
             {provided.placeholder}
           </BoardBox>

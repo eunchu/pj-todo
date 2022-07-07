@@ -1,5 +1,4 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useEffect } from "react";
 import {
   DragDropContext,
   resetServerContext,
@@ -10,12 +9,13 @@ import styled from "styled-components";
 import { Avatar } from "antd";
 import { UserOutlined, AntDesignOutlined } from "@ant-design/icons";
 
-import { ITodos } from "@store/interfaces";
-import { toDoState } from "@store/todosAtom";
+import { ITasks } from "@store/interfaces";
+import { taskState } from "@store/taskAtom";
 
 import Board from "@components/Board";
 import TaskProgress from "@components/TaskProgress";
 import RecentActivity from "@components/RecentActivity";
+import { useEffect, useMemo } from "react";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -76,7 +76,7 @@ const InfoArea = styled.section`
 `;
 
 const Home: NextPage = () => {
-  const [toDos, setToDos] = useRecoilState<ITodos>(toDoState);
+  const [tasks, setTasks] = useRecoilState<ITasks>(taskState);
 
   // NOTE 드래그가 끝났을 때
   const onDragEnd = ({ destination, draggableId, source }: DropResult) => {
@@ -84,32 +84,47 @@ const Home: NextPage = () => {
 
     // 같은 보드안에서의 Card이동
     if (destination?.droppableId === source.droppableId) {
-      setToDos((allBoards) => {
+      setTasks((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
         const target = boardCopy[source.index];
 
         boardCopy.splice(source.index, 1);
         boardCopy.splice(destination.index, 0, target);
 
-        return { ...allBoards, [source.droppableId]: boardCopy };
+        const newBoards = { ...allBoards, [source.droppableId]: boardCopy };
+        localStorage.setItem("tasks", JSON.stringify(newBoards));
+        return newBoards;
       });
     } else {
       // 다른 보드로의 Card이동
-      setToDos((allBoards) => {
+      setTasks((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
         const target = sourceBoard[source.index];
         const destinationBoard = [...allBoards[destination.droppableId]];
 
         sourceBoard.splice(source.index, 1);
         destinationBoard.splice(destination.index, 0, target);
-        return {
+
+        const newBoards = {
           ...allBoards,
           [source.droppableId]: sourceBoard,
           [destination.droppableId]: destinationBoard,
         };
+        localStorage.setItem("tasks", JSON.stringify(newBoards));
+        return newBoards;
       });
     }
   };
+
+  // SECTION 임시로 로컬스토리지 사용 >>>
+  const getTasks = useMemo(() => {
+    const data = typeof window !== "undefined" && localStorage.getItem("tasks");
+    return data && JSON.parse(data);
+  }, []);
+  useEffect(() => {
+    setTasks(getTasks);
+  }, [getTasks, setTasks]);
+  // !SECTION <<<
 
   return (
     <Container>
@@ -144,8 +159,8 @@ const Home: NextPage = () => {
         <DragDropContext onDragEnd={onDragEnd}>
           <Wrapper>
             <Boards>
-              {Object.keys(toDos).map((id) => (
-                <Board key={id} toDos={toDos[id]} id={id} />
+              {Object.keys(tasks).map((id) => (
+                <Board key={id} tasks={tasks[id]} id={id} />
               ))}
             </Boards>
           </Wrapper>

@@ -1,2 +1,2 @@
-export type { ITodo, ITodos } from "./todos";
+export type { ITasks, ITask } from "./tasks";
 export { EMenu } from "./commons";

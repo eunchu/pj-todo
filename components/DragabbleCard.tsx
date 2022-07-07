@@ -2,7 +2,7 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
-import { ITodo } from "@store/interfaces";
+import { ITask } from "@store/interfaces";
 
 interface ICardProps {
   isDragging: boolean;
@@ -24,12 +24,12 @@ const Card = styled.div<ICardProps>`
 `;
 
 interface ICardProps {
-  toDo: ITodo;
+  task: ITask;
   index: number;
 }
-const DragabbleCard = ({ toDo, index }: ICardProps) => {
+const DragabbleCard = ({ task, index }: ICardProps) => {
   return (
-    <Draggable key={toDo.id} draggableId={`${toDo.id}`} index={index}>
+    <Draggable key={task.id} draggableId={`${task.id}`} index={index}>
       {(provided, snepshot) => (
         <Card
           isDragging={snepshot.isDragging}
@@ -37,7 +37,7 @@ const DragabbleCard = ({ toDo, index }: ICardProps) => {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
         >
-          {toDo.title}
+          {task.title}
         </Card>
       )}
     </Draggable>

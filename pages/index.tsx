@@ -116,15 +116,11 @@ const Home: NextPage = () => {
     }
   };
 
-  // SECTION 임시로 로컬스토리지 사용 >>>
-  const getTasks = useMemo(() => {
-    const data = typeof window !== "undefined" && localStorage.getItem("tasks");
-    return data && JSON.parse(data);
-  }, []);
+  // NOTE 임시로 로컬스토리지 사용 >>>
   useEffect(() => {
-    setTasks(getTasks);
-  }, [getTasks, setTasks]);
-  // !SECTION <<<
+    const data = typeof window !== "undefined" && localStorage.getItem("tasks");
+    if (data) setTasks(JSON.parse(data));
+  }, [setTasks]);
 
   return (
     <Container>

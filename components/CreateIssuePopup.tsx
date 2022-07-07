@@ -3,7 +3,7 @@ import { Input } from "antd";
 import { useForm, Controller } from "react-hook-form";
 
 import Modal from "@molecules/Modal";
-import { ITask } from "@store/interfaces";
+import { ITask, EBoard } from "@store/interfaces";
 import { useSetRecoilState } from "recoil";
 import { taskState } from "@store/taskAtom";
 import { ButtonPrimary } from "@molecules/Buttons";
@@ -43,12 +43,18 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
   // 2. 이슈 삭제
   // 3. board 순서 변경
   // 4. board 생성
+
   // NOTE 이슈 추가
   // 서버추가 전, 임시로 로컬스토리지에 저장
   const onSubmit = (task: ITask) => {
     const newIssue = {
       id: Date.now(),
       title: task.title,
+      desc: "desc",
+      createDate: new Date(),
+      label: "label",
+      assignees: ["eunju", "mini"],
+      issueType: EBoard.ToDo,
     };
     setTasks((allBoards) => {
       localStorage.setItem(

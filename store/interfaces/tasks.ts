@@ -1,13 +1,18 @@
-export enum ETask {
-  "To Do" = "To Do",
-  "In Progress" = "In Progress",
-  "Review" = "Review",
-  "Done" = "Done",
+export enum EBoard {
+  ToDo = "To Do",
+  InProgress = "In Progress",
+  Review = "Review",
+  Done = "Done",
 }
 
 export interface ITask {
   id: number;
   title: string;
+  desc: string;
+  createDate: string;
+  label: string;
+  assignees: string[];
+  issueType: string;
 }
 
 export interface ITasks {

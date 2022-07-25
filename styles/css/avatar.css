@@ -1,0 +1,9 @@
+.card-avatar .ant-avatar-string {
+  font-size: 12px;
+  line-height: 24px !important;
+}
+/* max이상 표현되는 스타일 (ex. +1) */
+.ant-avatar-group .ant-avatar:not(:first-child) {
+  width: 26px;
+  height: 26px;
+}

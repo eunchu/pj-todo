@@ -10,8 +10,15 @@ export interface ITask {
   title: string;
   desc: string;
   createDate: string;
-  label: string;
-  assignees: string[];
+  label: {
+    name: string;
+    desc: string;
+    color: {
+      text: string;
+      bg: string;
+    };
+  };
+  assignees: { id: number; name: string; profileImg: string | null }[];
   issueType: string;
 }
 

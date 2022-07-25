@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Input } from "antd";
 import { useForm, Controller } from "react-hook-form";
+import moment from "moment";
 
 import Modal from "@molecules/Modal";
 import { ITask, EBoard } from "@store/interfaces";
@@ -50,10 +51,38 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
     const newIssue = {
       id: Date.now(),
       title: task.title,
-      desc: "desc",
-      createDate: new Date(),
-      label: "label",
-      assignees: ["eunju", "mini"],
+      desc: "이슈에 관한 설명을 이곳에 작성합니다",
+      createDate: moment().format("MMM DD"),
+      label: {
+        name: "Feature",
+        desc: "기능 추가",
+        color: {
+          text: "#ffffff",
+          bg: "#61798F",
+        },
+      },
+      assignees: [
+        {
+          id: 1,
+          name: "eunju",
+          profileImg: "https://github.com/eunchu.png",
+        },
+        {
+          id: 2,
+          name: "eunju2",
+          profileImg: null,
+        },
+        {
+          id: 3,
+          name: "eunju3sdfsdf",
+          profileImg: null,
+        },
+        {
+          id: 4,
+          name: "eunju3sdfsdf",
+          profileImg: null,
+        },
+      ],
       issueType: EBoard.ToDo,
     };
     setTasks((allBoards) => {

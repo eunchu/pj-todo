@@ -15,7 +15,7 @@ import { taskState } from "@store/taskAtom";
 import Board from "@components/Board";
 import TaskProgress from "@components/TaskProgress";
 import RecentActivity from "@components/RecentActivity";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 const Container = styled.div`
   height: calc(100vh - 50px);

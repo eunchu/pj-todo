@@ -9,5 +9,11 @@ declare module "styled-components" {
     cardColor: string;
     borderColor: string;
     infoBgColor: string;
+
+    text: {
+      color: {
+        subTitle: string;
+      };
+    };
   }
 }

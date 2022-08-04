@@ -6,7 +6,8 @@
       "@molecules/*": ["components/molecules/*"],
       "@styles/*": ["styles/*"],
       "@store/*": ["store/*"],
-      "@utils": ["utils"]
+      "@utils": ["utils"],
+      "@consts": ["consts"]
     },
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],

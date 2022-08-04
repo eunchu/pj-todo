@@ -67,6 +67,10 @@ const Contents = styled.div`
     font-weight: bold;
 
     margin-bottom: 4px;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
   .card-content-desc {
   }

@@ -9,7 +9,8 @@
       "@utils": ["utils"],
       "@consts": ["consts"],
       "@data/*": ["data/*"],
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "@api": ["api"]
     },
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],

@@ -4,12 +4,13 @@ import { useForm, Controller } from "react-hook-form";
 import moment from "moment";
 import { ContainerOutlined } from "@ant-design/icons";
 import { Select, Popover } from "antd";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { ITask, EBoard } from "@store/interfaces";
 import { useSetRecoilState } from "recoil";
 import { taskState } from "@store/taskAtom";
 import { ButtonPrimary } from "@molecules/Buttons";
-import { ISSUE_TYPE } from '@consts';
+import { ISSUE_TYPE } from "@consts";
 
 import Modal from "@molecules/Modal";
 import { useMemo } from "react";
@@ -76,6 +77,63 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
   // 3. board 순서 변경
   // 4. board 생성
 
+  //test
+  const addTask = useMutation(
+    () =>
+      fetch("/api/task", {
+        method: "POST",
+        body: JSON.stringify({
+          id: Date.now(),
+          title: "post test",
+          desc: "이슈에 관한 설명을 이곳에 작성합니다",
+          createDate: moment().format("MMM DD"),
+          label: {
+            name: "Feature",
+            desc: "기능 추가",
+            color: {
+              text: "#ffffff",
+              bg: "#61798F",
+            },
+          },
+          assignees: [
+            {
+              id: 1,
+              name: "eunju",
+              profileImg: "https://github.com/eunchu.png",
+            },
+            {
+              id: 2,
+              name: "eunju2",
+              profileImg: null,
+            },
+            {
+              id: 3,
+              name: "eunju3sdfsdf",
+              profileImg: null,
+            },
+            {
+              id: 4,
+              name: "eunju3sdfsdf",
+              profileImg: null,
+            },
+          ],
+          issueType: EBoard.ToDo,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    {
+      onSuccess: () => {
+        console.log("success");
+      },
+    }
+  );
+
+  // const onClickSave = () => {
+  //   addTask.mutate();
+  // };
+
   // NOTE 이슈 추가
   // 서버추가 전, 임시로 로컬스토리지에 저장
   const onSubmit = (task: ITask) => {
@@ -116,29 +174,29 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
       ],
       issueType: EBoard.ToDo,
     };
-    setTasks((allBoards) => {
-      localStorage.setItem(
-        "tasks",
-        JSON.stringify({
-          ...allBoards,
-          "To Do": [newIssue, ...allBoards["To Do"]],
-        })
-      );
-      return {
-        ...allBoards,
-        "To Do": [newIssue, ...allBoards["To Do"]],
-      };
-    });
+    addTask.mutate();
+    // setTasks((allBoards) => {
+    //   localStorage.setItem(
+    //     "tasks",
+    //     JSON.stringify({
+    //       ...allBoards,
+    //       "To Do": [newIssue, ...allBoards["To Do"]],
+    //     })
+    //   );
+    //   return {
+    //     ...allBoards,
+    //     "To Do": [newIssue, ...allBoards["To Do"]],
+    //   };
+    // });
+
     onClose();
   };
 
   // NOTE Assignee Box UI
   const assigneeBoxEl = useMemo(() => {
     // 유저 목록 호출. 호출 후 UI구현되도록 해야함
-    return (
-      <div>box</div>
-    )
-  }, [])
+    return <div>box</div>;
+  }, []);
 
   return (
     <Modal width={600} height={700} onClose={onClose}>
@@ -149,21 +207,23 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
             <SectionWarraper>
               <div className="textArea">
                 <ContainerOutlined className="title-icon" />
-                <Title>
-                  Select Issue Type
-                </Title>
+                <Title>Select Issue Type</Title>
               </div>
               <Controller
                 name="issueType"
                 control={control}
                 rules={{ required: "이슈 타입을 선택해주세요" }}
                 render={({ field }) => (
-                  <Select {...field} defaultValue={EBoard.ToDo} style={{width: '120px'}}>
-                    {
-                      ISSUE_TYPE.map(type => (
-                        <Option key={type} value={type}>{type}</Option>
-                      ))
-                    }
+                  <Select
+                    {...field}
+                    defaultValue={EBoard.ToDo}
+                    style={{ width: "120px" }}
+                  >
+                    {ISSUE_TYPE.map((type) => (
+                      <Option key={type} value={type}>
+                        {type}
+                      </Option>
+                    ))}
                   </Select>
                 )}
               />
@@ -192,9 +252,7 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
             <SectionWarraper>
               <div className="textArea">
                 <ContainerOutlined className="title-icon" />
-                <Title>
-                  Description
-                </Title>
+                <Title>Description</Title>
               </div>
               <Controller
                 name="desc"
@@ -210,26 +268,32 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
             <SectionWarraper>
               <div className="textArea">
                 <ContainerOutlined className="title-icon" />
-                <Title>
-                  Assignees
-                </Title>
+                <Title>Assignees</Title>
               </div>
               <Controller
                 name="assignees"
                 control={control}
                 rules={{ required: "최소 한명이 할당되야 합니다" }}
                 render={({ field }) => (
-                  <Select {...field} mode="multiple" style={{minWidth: '120px'}} >
+                  <Select
+                    {...field}
+                    mode="multiple"
+                    style={{ minWidth: "120px" }}
+                  >
                     <Option value="1">1</Option>
                     <Option value="2">2</Option>
                   </Select>
                 )}
               />
             </SectionWarraper>
-
           </FromArea>
           <FooterArea>
-            <ButtonPrimary customStyle={{ width: "80px" }}>Save</ButtonPrimary>
+            <ButtonPrimary
+              customStyle={{ width: "80px" }}
+              // onClick={onClickSave}
+            >
+              Save
+            </ButtonPrimary>
           </FooterArea>
         </Form>
       </Container>

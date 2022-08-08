@@ -16,6 +16,8 @@ import Board from "@components/Board";
 import TaskProgress from "@components/TaskProgress";
 import RecentActivity from "@components/RecentActivity";
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys, taskAPIs } from "api";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -117,10 +119,18 @@ const Home: NextPage = () => {
   };
 
   // NOTE 임시로 로컬스토리지 사용 >>>
-  useEffect(() => {
-    const data = typeof window !== "undefined" && localStorage.getItem("tasks");
-    if (data) setTasks(JSON.parse(data));
-  }, [setTasks]);
+  // useEffect(() => {
+  //   const data = typeof window !== "undefined" && localStorage.getItem("tasks");
+  //   if (data) setTasks(JSON.parse(data));
+  // }, [setTasks]);
+
+  const { data: initTasks } = useQuery(
+    queryKeys.taskKeyById("[GET]-All"),
+    () => taskAPIs.getTasks(),
+    {
+      retry: 0,
+    }
+  );
 
   return (
     <Container>

@@ -11,10 +11,10 @@ import {
 import Label from "@components/atoms/Label";
 import { ITask } from "@store/interfaces";
 
-interface ICardProps {
+interface ICardStyleProps {
   isDragging: boolean;
 }
-const Card = styled.div<ICardProps>`
+const Card = styled.div<ICardStyleProps>`
   height: 140px;
 
   display: flex;

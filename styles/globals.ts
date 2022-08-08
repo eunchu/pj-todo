@@ -22,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     line-height: 1;
 
-    background-color: ${({ theme }) => theme.bgColor};
+    background-color: ${({ theme }) => (theme as { bgColor: string }).bgColor};
     color: #303030;
 
     margin: 0;

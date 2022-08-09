@@ -17,6 +17,8 @@ import TaskProgress from "@components/TaskProgress";
 import RecentActivity from "@components/RecentActivity";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys, taskAPIs } from "@api";
+import { ISSUE_TYPE } from "@consts";
+import { useState } from "react";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -79,6 +81,8 @@ const InfoArea = styled.section`
 const Home: NextPage = () => {
   const [tasks, setTasks] = useRecoilState<ITasks>(taskState);
 
+  const [test, testt] = useState<any>(null);
+
   // NOTE 드래그가 끝났을 때
   const onDragEnd = ({ destination, draggableId, source }: DropResult) => {
     if (!destination || !source) return;
@@ -123,12 +127,8 @@ const Home: NextPage = () => {
     () => taskAPIs.getTasks(),
     {
       retry: 0,
-      onSuccess: (res) => {
-        console.log("??", res);
-      },
     }
   );
-
   // put test TODO
   // const updateTask = useMutation(
   //   () =>
@@ -177,8 +177,15 @@ const Home: NextPage = () => {
         <DragDropContext onDragEnd={onDragEnd}>
           <Wrapper>
             <Boards>
-              {Object.keys(tasks).map((id) => (
-                <Board key={id} tasks={tasks[id]} id={id} />
+              {ISSUE_TYPE.map((type) => (
+                <Board
+                  key={type}
+                  tasks={
+                    initTasks?.data.filter((task) => task.issueType === type) ??
+                    []
+                  }
+                  id={type}
+                />
               ))}
             </Boards>
           </Wrapper>

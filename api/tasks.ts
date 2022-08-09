@@ -2,11 +2,14 @@ import axios from "axios";
 
 import { ITask } from "@store/interfaces";
 import { IFactory } from "./interface";
+import { ITasksAPIRes } from "@store/interfaces/tasks";
 
 export const tasksFactory = ({ baseUrl }: IFactory) => {
   // NOTE [Get]
   const getTasks = async () => {
-    return await (await axios.get(baseUrl)).data();
+    return (await (
+      await axios.get(baseUrl)
+    ).data) as ITasksAPIRes;
   };
 
   // NOTE [Create]
@@ -28,7 +31,7 @@ export const tasksFactory = ({ baseUrl }: IFactory) => {
           "Content-Type": "application/json",
         },
       })
-    ).data();
+    ).data;
   };
 
   return { getTasks, createTask, updateTask };

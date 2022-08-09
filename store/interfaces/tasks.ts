@@ -23,6 +23,8 @@ export interface ITask {
   issueType: string;
 }
 
-export interface ITasks {
-  [key: string]: ITask[];
+export interface ITasksAPIRes {
+  data: ITask[];
+  status: string;
+  message: string;
 }

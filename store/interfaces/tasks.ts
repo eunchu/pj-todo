@@ -18,6 +18,7 @@ export interface ITask {
       bg: string;
     };
   };
+  owner: string;
   assignees: { id: number; name: string; profileImg: string | null }[];
   issueType: string;
 }

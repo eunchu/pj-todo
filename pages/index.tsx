@@ -15,7 +15,7 @@ import { taskState } from "@store/taskAtom";
 import Board from "@components/Board";
 import TaskProgress from "@components/TaskProgress";
 import RecentActivity from "@components/RecentActivity";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys, taskAPIs } from "@api";
 
 const Container = styled.div`
@@ -117,19 +117,32 @@ const Home: NextPage = () => {
     }
   };
 
-  // NOTE 임시로 로컬스토리지 사용 >>>
-  // useEffect(() => {
-  //   const data = typeof window !== "undefined" && localStorage.getItem("tasks");
-  //   if (data) setTasks(JSON.parse(data));
-  // }, [setTasks]);
-
+  // NOTE 전체 Task 목록 호출
   const { data: initTasks } = useQuery(
     queryKeys.taskKeyById("[GET]-All"),
     () => taskAPIs.getTasks(),
     {
       retry: 0,
+      onSuccess: (res) => {
+        console.log("??", res);
+      },
     }
   );
+
+  // put test TODO
+  // const updateTask = useMutation(
+  //   () =>
+  //     taskAPIs.updateTask(),
+  //   {
+  //     onSuccess: () => {
+  //       console.log("update!");
+  //     },
+  //   }
+  // );
+  // const testUpdate = () => {
+  //   console.log("update");
+  //   updateTask.mutate();
+  // };
 
   return (
     <Container>

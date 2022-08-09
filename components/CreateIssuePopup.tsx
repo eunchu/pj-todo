@@ -86,6 +86,7 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
           id: Date.now(),
           title: "post test",
           desc: "이슈에 관한 설명을 이곳에 작성합니다",
+          owner: "eunju",
           createDate: moment().format("MMM DD"),
           label: {
             name: "Feature",
@@ -174,6 +175,8 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
       ],
       issueType: EBoard.ToDo,
     };
+    console.log("click save!");
+
     addTask.mutate();
     // setTasks((allBoards) => {
     //   localStorage.setItem(
@@ -212,7 +215,7 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
               <Controller
                 name="issueType"
                 control={control}
-                rules={{ required: "이슈 타입을 선택해주세요" }}
+                // rules={{ required: "이슈 타입을 선택해주세요" }}
                 render={({ field }) => (
                   <Select
                     {...field}
@@ -241,7 +244,7 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
               <Controller
                 name="title"
                 control={control}
-                rules={{ required: "제목은 필수 항목입니다" }}
+                // rules={{ required: "제목은 필수 항목입니다" }}
                 render={({ field }) => (
                   <Input {...field} autoFocus placeholder="title" />
                 )}
@@ -257,7 +260,7 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
               <Controller
                 name="desc"
                 control={control}
-                rules={{ required: "제목은 필수 항목입니다" }}
+                // rules={{ required: "제목은 필수 항목입니다" }}
                 render={({ field }) => (
                   <Input {...field} autoFocus placeholder="Desctiption" />
                 )}
@@ -273,7 +276,7 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
               <Controller
                 name="assignees"
                 control={control}
-                rules={{ required: "최소 한명이 할당되야 합니다" }}
+                // rules={{ required: "최소 한명이 할당되야 합니다" }}
                 render={({ field }) => (
                   <Select
                     {...field}

@@ -6,7 +6,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import GlobalStyle from "@styles/globals";
 import { defaultTheme } from "@styles/theme";
-import Header from "@components/Header";
 
 import "../styles/css/avatar.css";
 
@@ -25,7 +24,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={defaultTheme}>
-          <Header />
           <Component {...pageProps} />
           <GlobalStyle />
           <ReactQueryDevtools initialIsOpen />

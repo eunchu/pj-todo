@@ -32,6 +32,9 @@ const GlobalStyle = createGlobalStyle`
     color: inherit;
     text-decoration: none;
   }
+  span {
+    display: inline-block;
+  }
 `;
 
 export default GlobalStyle;

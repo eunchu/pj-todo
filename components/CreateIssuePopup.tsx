@@ -3,8 +3,9 @@ import { Input } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import moment from "moment";
 import { ContainerOutlined } from "@ant-design/icons";
-import { Select, Popover } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Select, Popover } from "antd";
+import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 
 import { ITask, EBoard } from "@store/interfaces";
 import { ButtonPrimary } from "@molecules/Buttons";
@@ -60,6 +61,25 @@ const FooterArea = styled.div`
 
   border-top: 1px solid #ededf3;
   padding: 0 24px;
+`;
+const AssingeeDropdown = styled.div`
+  .placeholder {
+    font-size: 11px;
+    color: ${({ theme }) => theme.text.color.subTitle};
+
+    margin: 4px 4px 4px 10px;
+  }
+`;
+const AssigneeTagBox = styled.div``;
+const AssignSelf = styled.span`
+  color: #737373;
+
+  margin-top: 4px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 interface ICreateIssuePopupProps {
@@ -193,10 +213,26 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
   };
 
   // NOTE Assignee Box UI
-  const assigneeBoxEl = useMemo(() => {
+  const assigneeDropdownRender = (menu: any) => {
     // 유저 목록 호출. 호출 후 UI구현되도록 해야함
-    return <div>box</div>;
-  }, []);
+    return (
+      <AssingeeDropdown>
+        <div className="placeholder">Select one or more people</div>
+        {/* TODO 유저 정보 받아서 출력(git profile image) */}
+        {menu}
+      </AssingeeDropdown>
+    );
+  };
+
+  const assigneeTagRender = (props: CustomTagProps) => {
+    const { label, value, closable, onClose } = props;
+    const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
+    return <AssigneeTagBox>{label}</AssigneeTagBox>;
+  };
 
   return (
     <Modal width={600} height={700} onClose={onClose}>
@@ -278,13 +314,18 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
                   <Select
                     {...field}
                     mode="multiple"
-                    style={{ minWidth: "120px" }}
+                    tagRender={assigneeTagRender}
+                    dropdownRender={assigneeDropdownRender}
+                    style={{ minWidth: "100%" }}
                   >
                     <Option value="1">1</Option>
                     <Option value="2">2</Option>
+                    <Option value="3">3</Option>
+                    <Option value="4">4</Option>
                   </Select>
                 )}
               />
+              <AssignSelf>Assign Yourself</AssignSelf>
             </SectionWarraper>
           </FromArea>
           <FooterArea>

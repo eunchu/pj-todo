@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import {
   DragDropContext,
@@ -14,7 +15,7 @@ import RecentActivity from "@components/RecentActivity";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys, taskAPIs } from "@api";
 import { ISSUE_TYPE } from "@consts";
-import { useRef } from "react";
+import Header from "@components/Header";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -126,59 +127,63 @@ const Home: NextPage = () => {
   };
 
   return (
-    <Container>
-      {/* NOTE Drag 영역 */}
-      <DragArea>
-        <div className="main-title">
-          <Title>Task Management</Title>
-          <UserList>
-            <Avatar.Group
-              maxCount={5}
-              maxStyle={{ color: "#a2a2a2", backgroundColor: "#fde3cf" }}
-            >
-              <Avatar src="https://github.com/eunchu.png" />
-              <Avatar src="https://joeschmoe.io/api/v1/random" />
-              <Avatar src="https://joeschmoe.io/api/v1/random" />
-              <Avatar style={{ backgroundColor: "#a2a2a2" }}>K</Avatar>
-              <Avatar
-                style={{ backgroundColor: "#a2a2a2" }}
-                icon={<UserOutlined />}
-              />
-              <Avatar
-                style={{ backgroundColor: "#a2a2a2" }}
-                icon={<AntDesignOutlined />}
-              />
-              <Avatar style={{ backgroundColor: "#a2a2a2" }}>K</Avatar>
-            </Avatar.Group>
-            <NewUser>
-              <Avatar style={{ backgroundColor: "#367C72" }}>+</Avatar>
-            </NewUser>
-          </UserList>
-        </div>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Wrapper>
-            <Boards>
-              {ISSUE_TYPE.map((type) => (
-                <Board
-                  key={type}
-                  tasks={
-                    initTasks?.data.filter((task) => task.issueType === type) ??
-                    []
-                  }
-                  type={type}
+    <>
+      <Header />
+      <Container>
+        {/* NOTE Drag 영역 */}
+        <DragArea>
+          <div className="main-title">
+            <Title>Task Management</Title>
+            <UserList>
+              <Avatar.Group
+                maxCount={5}
+                maxStyle={{ color: "#a2a2a2", backgroundColor: "#fde3cf" }}
+              >
+                <Avatar src="https://github.com/eunchu.png" />
+                <Avatar src="https://joeschmoe.io/api/v1/random" />
+                <Avatar src="https://joeschmoe.io/api/v1/random" />
+                <Avatar style={{ backgroundColor: "#a2a2a2" }}>K</Avatar>
+                <Avatar
+                  style={{ backgroundColor: "#a2a2a2" }}
+                  icon={<UserOutlined />}
                 />
-              ))}
-            </Boards>
-          </Wrapper>
-        </DragDropContext>
-      </DragArea>
-      {/* NOTE Info 영역 */}
-      <InfoArea>
-        {/* 캘린더 추가 */}
-        <TaskProgress />
-        <RecentActivity />
-      </InfoArea>
-    </Container>
+                <Avatar
+                  style={{ backgroundColor: "#a2a2a2" }}
+                  icon={<AntDesignOutlined />}
+                />
+                <Avatar style={{ backgroundColor: "#a2a2a2" }}>K</Avatar>
+              </Avatar.Group>
+              <NewUser>
+                <Avatar style={{ backgroundColor: "#367C72" }}>+</Avatar>
+              </NewUser>
+            </UserList>
+          </div>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Wrapper>
+              <Boards>
+                {ISSUE_TYPE.map((type) => (
+                  <Board
+                    key={type}
+                    tasks={
+                      initTasks?.data.filter(
+                        (task) => task.issueType === type
+                      ) ?? []
+                    }
+                    type={type}
+                  />
+                ))}
+              </Boards>
+            </Wrapper>
+          </DragDropContext>
+        </DragArea>
+        {/* NOTE Info 영역 */}
+        <InfoArea>
+          {/* 캘린더 추가 */}
+          <TaskProgress />
+          <RecentActivity />
+        </InfoArea>
+      </Container>
+    </>
   );
 };
 

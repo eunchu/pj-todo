@@ -7,8 +7,6 @@ import { Select, Popover } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { ITask, EBoard } from "@store/interfaces";
-import { useSetRecoilState } from "recoil";
-import { taskState } from "@store/taskAtom";
 import { ButtonPrimary } from "@molecules/Buttons";
 import { ISSUE_TYPE } from "@consts";
 
@@ -70,8 +68,6 @@ interface ICreateIssuePopupProps {
 const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
   const { handleSubmit, control } = useForm<ITask>();
 
-  const setTasks = useSetRecoilState(taskState);
-
   // 1. 로컬 스토리지 저장
   // 2. 이슈 삭제
   // 3. board 순서 변경
@@ -84,6 +80,7 @@ const CreateIssuePopup = ({ onClose }: ICreateIssuePopupProps) => {
         method: "POST",
         body: JSON.stringify({
           id: Date.now(),
+          order: 0,
           title: "post test",
           desc: "이슈에 관한 설명을 이곳에 작성합니다",
           owner: "eunju",

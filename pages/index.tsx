@@ -4,13 +4,9 @@ import {
   resetServerContext,
   DropResult,
 } from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { Avatar } from "antd";
 import { UserOutlined, AntDesignOutlined } from "@ant-design/icons";
-
-import { ITasks } from "@store/interfaces";
-import { taskState } from "@store/taskAtom";
 
 import Board from "@components/Board";
 import TaskProgress from "@components/TaskProgress";
@@ -18,7 +14,7 @@ import RecentActivity from "@components/RecentActivity";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys, taskAPIs } from "@api";
 import { ISSUE_TYPE } from "@consts";
-import { useState } from "react";
+import { useRef } from "react";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -79,47 +75,7 @@ const InfoArea = styled.section`
 `;
 
 const Home: NextPage = () => {
-  const [tasks, setTasks] = useRecoilState<ITasks>(taskState);
-
-  const [test, testt] = useState<any>(null);
-
-  // NOTE 드래그가 끝났을 때
-  const onDragEnd = ({ destination, draggableId, source }: DropResult) => {
-    if (!destination || !source) return;
-
-    // 같은 보드안에서의 Card이동
-    if (destination?.droppableId === source.droppableId) {
-      setTasks((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        const target = boardCopy[source.index];
-
-        boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination.index, 0, target);
-
-        const newBoards = { ...allBoards, [source.droppableId]: boardCopy };
-        localStorage.setItem("tasks", JSON.stringify(newBoards));
-        return newBoards;
-      });
-    } else {
-      // 다른 보드로의 Card이동
-      setTasks((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        const target = sourceBoard[source.index];
-        const destinationBoard = [...allBoards[destination.droppableId]];
-
-        sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination.index, 0, target);
-
-        const newBoards = {
-          ...allBoards,
-          [source.droppableId]: sourceBoard,
-          [destination.droppableId]: destinationBoard,
-        };
-        localStorage.setItem("tasks", JSON.stringify(newBoards));
-        return newBoards;
-      });
-    }
-  };
+  const getListRef = useRef<boolean>(true);
 
   // NOTE 전체 Task 목록 호출
   const { data: initTasks } = useQuery(
@@ -127,22 +83,47 @@ const Home: NextPage = () => {
     () => taskAPIs.getTasks(),
     {
       retry: 0,
+      enabled: getListRef.current === true,
+      onSuccess: () => (getListRef.current = false),
     }
   );
-  // put test TODO
-  // const updateTask = useMutation(
-  //   () =>
-  //     taskAPIs.updateTask(),
-  //   {
-  //     onSuccess: () => {
-  //       console.log("update!");
-  //     },
-  //   }
-  // );
-  // const testUpdate = () => {
-  //   console.log("update");
-  //   updateTask.mutate();
-  // };
+
+  // NOTE Task 업데이트
+  const updateTask = useMutation((task: any) => taskAPIs.updateTask(task), {
+    onSuccess: () => {
+      console.log("update!");
+      getListRef.current = true;
+    },
+  });
+
+  // NOTE 드래그가 끝났을 때
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    if (!destination || !source) return;
+
+    // 같은 보드안에서의 Card이동
+    if (destination?.droppableId === source.droppableId) {
+      const changedSource = {
+        ...initTasks?.data[source.index],
+        order: destination.index,
+      };
+      const changedDestination = {
+        ...initTasks?.data[destination.index],
+        order: source.index,
+      };
+      const updateItems = [changedSource, changedDestination];
+
+      updateTask.mutate(updateItems as any);
+    } else {
+      // 다른 보드로의 Card이동
+      const changedSource = {
+        ...initTasks?.data[source.index],
+        issueType: destination.droppableId,
+      };
+      const updateItems = [changedSource];
+
+      updateTask.mutate(updateItems as any);
+    }
+  };
 
   return (
     <Container>
@@ -184,7 +165,7 @@ const Home: NextPage = () => {
                     initTasks?.data.filter((task) => task.issueType === type) ??
                     []
                   }
-                  id={type}
+                  type={type}
                 />
               ))}
             </Boards>

@@ -46,16 +46,16 @@ const BoardBox = styled.div<IBoardBoxProps>`
 `;
 
 interface IBoardProps {
-  id: string;
+  type: string;
   tasks: ITask[];
 }
-const Board = ({ id, tasks }: IBoardProps) => {
+const Board = ({ type, tasks }: IBoardProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <Wrapper>
       <div className="board-title-area">
-        <Title>{id}</Title>
+        <Title>{type}</Title>
         <MoreMenu>
           <PlusCircleOutlined
             className="add-board"
@@ -64,7 +64,7 @@ const Board = ({ id, tasks }: IBoardProps) => {
           <MoreOutlined />
         </MoreMenu>
       </div>
-      <Droppable droppableId={id}>
+      <Droppable droppableId={type}>
         {(provided, snepshot) => (
           <BoardBox
             isDraggingOver={snepshot.isDraggingOver}

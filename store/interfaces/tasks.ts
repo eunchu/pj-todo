@@ -7,6 +7,7 @@ export enum EBoard {
 
 export interface ITask {
   id: number;
+  order: number;
   title: string;
   desc: string;
   createDate: string;

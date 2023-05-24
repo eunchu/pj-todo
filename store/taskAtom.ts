@@ -1,9 +1,9 @@
 import { atom } from "recoil";
-import { v1 } from 'uuid';
+import { v1 } from "uuid";
 
-import { ITasks } from "./interfaces";
+// import { ITask } from "./interfaces";
 
-export const taskState = atom<ITasks>({
+export const taskState = atom({
   key: `toDo-${v1()}`,
   default: {
     "To Do": [],

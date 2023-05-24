@@ -18,8 +18,11 @@ assing인원
 체크리스트
 
 - 이슈 멀티 업데이트
-- 업데이트 후 목록 재 호출, fresh
+- ✅ 업데이트 후 목록 재 호출, fresh
 - 이슈 저장 후 목록 재 호출, fresh
+- Oauth 로그인 구현
+  - github
+  - kakao
 
 ```
 const labelColors = [
